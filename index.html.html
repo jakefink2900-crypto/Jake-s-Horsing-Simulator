@@ -1,0 +1,578 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/orbitron@5.0.12/index.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{background:#1e1c44;color:#ddd8ff;min-height:100vh;font-family:-apple-system,'Segoe UI',sans-serif;font-size:15px}
+header{background:#14123a;border-bottom:2px solid #c8a000;padding:9px 13px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:'Orbitron','Impact',sans-serif;font-size:.94rem;color:#ffd700;letter-spacing:1.5px}
+.logo span{color:#00e676}
+#jakeName{cursor:pointer;user-select:none;transition:color .1s}
+.money-amt{font-family:'Orbitron',monospace;font-size:1.08rem;color:#00e676}
+.sub{color:#6860a0;font-size:.74rem;margin-top:1px}
+.gbar{height:4px;background:#2a2460;border-radius:3px;margin-top:3px}
+.gfill{height:100%;background:linear-gradient(90deg,#6600cc,#cc00ff);border-radius:3px;transition:width .5s}
+nav{display:flex;background:#100e2e;border-bottom:1px solid #28245a}
+nav button{flex:1;padding:9px 2px;background:none;border:none;border-bottom:3px solid transparent;color:#6860a0;cursor:pointer;font-family:'Orbitron','Impact',sans-serif;font-size:.67rem;letter-spacing:.3px}
+nav button.active{color:#ffd700;border-bottom-color:#ffd700}
+nav button:hover:not(.active){color:#c8c0f0}
+nav button:disabled{opacity:.3;cursor:not-allowed}
+#main{padding:13px;max-width:680px;margin:0 auto}
+.sec{font-family:'Orbitron',sans-serif;font-size:.78rem;color:#ffd700;letter-spacing:2px;margin-bottom:10px;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px}
+.hcard{background:#26224e;border-radius:10px;padding:11px;border:1px solid #3a3678;position:relative;transition:border-color .15s}
+.hcard.click{cursor:pointer}.hcard.click:hover{border-color:#ffd700}
+.hcard.sel{border-color:#ff4444!important;border-width:2px}
+.hcard.mort{background:#2a1015;border-color:#55101a}
+.hcard.spl{background:#180a3a;border-color:#8800cc;animation:sg 2s infinite alternate}
+@keyframes sg{from{box-shadow:0 0 8px #7700cc}to{box-shadow:0 0 22px #cc00ff}}
+.hname{font-weight:bold;font-size:.97rem}
+.hage{color:#6860a0;font-size:.77rem;margin:2px 0 5px}
+.sb{margin:2px 0}.sbl{font-size:.74rem;color:#6860a0;display:flex;justify-content:space-between;font-family:'Courier New',monospace}
+.sbr{height:5px;background:#1c1840;border-radius:3px;margin-top:1px}.sbf{height:100%;border-radius:3px}
+.gb{display:inline-block;font-size:.69rem;background:#1c1840;border-radius:3px;padding:1px 4px;margin:2px 2px 0 0;font-family:'Courier New',monospace}
+.wb{background:#ffd700;color:#000;font-size:.69rem;border-radius:3px;padding:1px 5px;margin-left:4px}
+canvas{display:block;width:100%;border-radius:10px;border:1px solid #28245a;background:#04020e}
+.btn{padding:7px 13px;border:none;border-radius:7px;cursor:pointer;font-weight:bold;font-size:.86rem;font-family:'Orbitron','Impact',sans-serif;letter-spacing:.5px;transition:filter .15s,transform .1s}
+.btn:active:not(:disabled){transform:scale(.96)}.btn:not(:disabled):hover{filter:brightness(1.18)}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+.bred{background:#7a0000;color:#ff9090}.bgrn{background:#1b4a1f;color:#00e676}
+.bgld{background:#7a5500;color:#ffd700}.bblu{background:#0d2a60;color:#90caf9}
+.bpur{background:#4a0088;color:#dd99ff}.bsell{background:#1a2a40;color:#80c8ff}
+.bconf{background:#7a3000;color:#ffcc80}
+.grind-btn{width:100%;padding:18px;background:linear-gradient(135deg,#1a0a30,#0a1a30);border:2px solid #4488ff;border-radius:12px;color:#90caf9;font-family:'Orbitron',sans-serif;font-size:.9rem;cursor:pointer;letter-spacing:1px;transition:all .1s;user-select:none}
+.grind-btn:active{transform:scale(.97);border-color:#ffd700;color:#ffd700;background:linear-gradient(135deg,#2a1040,#1a2a40)}
+.prow{display:flex;gap:10px;font-size:.78rem;margin:6px 0;flex-wrap:wrap;font-family:'Courier New',monospace}
+.rbox{text-align:center;padding:12px;border-radius:10px;margin-top:10px;font-size:.9rem;font-weight:bold;font-family:'Orbitron',sans-serif;letter-spacing:1px}
+.rwin{background:#0d3018;color:#00e676;border:1px solid #00e676}.rlose{background:#2a0608;color:#ff9090;border:1px solid #ff4444}
+.rplace{background:#0a1a3a;color:#90caf9;border:1px solid #4488ff}
+.stand{background:#26224e;border-radius:8px;padding:10px;margin-top:8px;border:1px solid #3a3678}
+.srow{display:flex;justify-content:space-between;padding:4px 0;font-size:.8rem;border-bottom:1px solid #1e1a44}.srow:last-child{border:none}
+.bprev{background:#0e1a10;border:1px solid #1b4a1f;border-radius:10px;padding:12px;margin-top:12px}
+.mcard{background:#26224e;border-radius:10px;padding:11px;border:1px solid #3a3678}
+.ptag{font-family:'Orbitron',sans-serif;color:#ffd700;font-size:.88rem;margin:7px 0 5px}
+.survival{background:#26224e;border:1px solid #3a3678;border-radius:10px;padding:10px 12px;margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.lwarn{color:#ff9800;font-size:.76rem;font-family:'Courier New',monospace;background:#1a1000;border:1px solid #4a2800;border-radius:6px;padding:5px 10px;margin-bottom:8px}
+.pending-box{background:#0e1020;border:1px solid #4488ff;border-radius:8px;padding:9px 12px;margin-bottom:10px;font-size:.8rem}
+.hint{color:#90caf9;background:#0d1a30;border:1px solid #2a4a80;border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:.79rem;line-height:1.7}
+.rlpill{display:inline-flex;align-items:center;gap:6px;font-family:'Orbitron',sans-serif;font-size:.71rem;padding:5px 12px;border-radius:20px;margin-bottom:8px}
+.rlpill.ok{background:#0d3018;color:#00e676;border:1px solid #00e676}.rlpill.out{background:#2a0608;color:#ff9090;border:1px solid #ff4444}
+.award-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:14px}
+.award-card{background:#26224e;border:1px solid #3a3678;border-radius:8px;padding:10px;text-align:center}
+.aicon{font-size:1.4rem;display:block;margin-bottom:3px}
+.atitle{font-family:'Orbitron',sans-serif;font-size:.65rem;color:#ffd700;letter-spacing:1px;margin-bottom:3px}
+.ahorse{font-size:.87rem;font-weight:bold;margin-bottom:2px}.astat{font-size:.73rem;color:#6860a0;font-family:'Courier New',monospace}
+.hof-row{background:#26224e;border-radius:8px;padding:10px;margin-bottom:7px;border:1px solid #3a3678;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.bround{background:#26224e;border-radius:8px;padding:10px;margin-bottom:8px;border:1px solid #3a3678}
+.bround.won{border-color:#00e676}.bround.lost{border-color:#ff4444}.bround.locked{opacity:.4}
+.rtitle{font-family:'Orbitron',sans-serif;font-size:.73rem;color:#ffd700;letter-spacing:1px;margin-bottom:6px}
+.sbadge{font-size:.71rem;border-radius:3px;padding:1px 6px;font-family:'Courier New',monospace;font-weight:bold;display:inline-block;margin-bottom:4px}
+.mortb{background:#3a0a0f;color:#ff4444;border:1px solid #660011}.splb{background:#1a0030;color:#cc88ff;border:1px solid #7700cc}
+select{background:#26224e;color:#ddd8ff;border:1px solid #3a3678;border-radius:6px;padding:6px 8px;font-family:inherit;font-size:.82rem}
+.empty{color:#6860a0;text-align:center;padding:40px;font-size:.92rem}
+.tip{color:#302c60;font-size:.72rem;margin-top:8px}
+.warn{color:#ff4444;font-size:.76rem;margin:4px 0}
+</style>
+
+<header>
+  <div>
+    <div class="logo"><span id="jakeName" onclick="jakeClick()">JAKE'S</span> <span>HORSE</span> SIMULATOR</div>
+    <div class="sub" id="dayEl">Day 1</div>
+  </div>
+  <div style="text-align:right">
+    <div style="display:flex;gap:5px;align-items:center;justify-content:flex-end">
+      <button class="btn bblu" onclick="saveGame()" id="saveBtn" style="font-size:.68rem;padding:4px 8px">SAVE</button>
+      <button class="btn bgld" onclick="skipDay()" id="skipBtn" style="font-size:.68rem;padding:4px 8px">+DAY</button>
+      <div class="money-amt" id="moneyEl">$400</div>
+    </div>
+    <div class="sub" style="margin-top:3px"><div class="gbar"><div class="gfill" id="gfill" style="width:0%"></div></div></div>
+    <div class="sub" id="subEl">Goal: Win Jake's Grand Tournament</div>
+  </div>
+</header>
+<nav>
+  <button id="nt-stable" class="active" onclick="setTab('stable')">STABLE</button>
+  <button id="nt-race" onclick="setTab('race')">RACE</button>
+  <button id="nt-breed" onclick="setTab('breed')">BREED</button>
+  <button id="nt-market" onclick="setTab('market')">MARKET</button>
+  <button id="nt-hof" onclick="setTab('hof')">HOF</button>
+  <button id="nt-tourney" onclick="setTab('tourney')">TOURNEY</button>
+</nav>
+<div id="main"></div>
+
+<script>
+// ── SECRET ─────────────────────────────────────────────
+let jakeClicks=0,jakeTimer=null;
+function jakeClick(){
+  jakeClicks++;
+  clearTimeout(jakeTimer);
+  jakeTimer=setTimeout(()=>{jakeClicks=0;},3500);
+  const el=document.getElementById('jakeName');
+  if(el)el.style.color=jakeClicks%2?'#ff9800':'#ffd700';
+  if(jakeClicks>=10){
+    jakeClicks=0;clearTimeout(jakeTimer);
+    G.money+=100000;updHdr();
+    if(el){el.style.color='#00e676';setTimeout(()=>{el.style.color='#ffd700';},2500);}
+    const m=document.getElementById('main');
+    const old=m.innerHTML;
+    m.innerHTML=`<div style="text-align:center;padding:60px 20px"><div style="font-family:Orbitron,Impact,sans-serif;font-size:2rem;color:#ffd700;margin-bottom:14px">💰 SECRET FOUND!</div><div style="font-size:1.1rem;color:#00e676;margin-bottom:8px">+$100,000 deposited!</div><div style="color:#6860a0;font-size:.82rem">You found Jake's hidden stash.</div></div>`;
+    setTimeout(()=>{m.innerHTML=old;render();},2200);
+  }
+}
+
+// ── CONSTANTS ──────────────────────────────────────────
+const NAMES=['Thunder','Blaze','Storm','Shadow','Nova','Comet','Rocket','Duchess','Baron','Titan','Luna','Ace','Zephyr','Flame','Ghost','Eclipse','Orion','Vega','Diesel','Maverick','Fury','Atlas','Wraith','Riptide','Ember','Frost','Gale','Dusk','Dawn','Flint','Brook','Cedar','Ridge','Vale','Glen','Cliff','Ash','Peak','Canyon','Mesa','Summit','Crest','Heath','Ravine','Bolt','Arrow','Dart','Lance','Spike','Blade','Rush','Surge','Blitz','Flash','Streak','Force','Strike','Swift','Burst','Lash','Dash','Onyx','Cobalt','Amber','Ivory','Crimson','Scarlet','Indigo','Jade','Obsidian','Copper','Silver','Bronze','Slate','Snow','Midnight','Auburn','Russet','Pewter','Zeus','Apollo','Athena','Ares','Hermes','Poseidon','Artemis','Nike','Ajax','Achilles','Hector','Loki','Thor','Odin','Freya','Fenrir','Baldur','Valkyrie','Sigurd','Leonidas','Lyra','Cygnus','Draco','Perseus','Andromeda','Altair','Rigel','Sirius','Polaris','Arcturus','Deneb','Capella','Procyon','Pollux','Castor','Rogue','Rebel','Outlaw','Bandit','Ranger','Scout','Hunter','Drifter','Wanderer','Nomad','Crusader','Victor','Valor','Honor','Glory','Legend','Oracle','Specter','Banshee','Revenant','Drake','Hawk','Raven','Falcon','Lynx','Stag','Wolf','Osprey','Kestrel','Harrier','Merlin','Condor','Cobra','Viper','Panther','Jaguar','Cinder','Spark','Inferno','Torrent','Typhoon','Cyclone','Tempest','Quake','Blizzard','Avalanche','Glacier','Tornado','Squall','Aegis','Apex','Beacon','Cascade','Cosmos','Delta','Dynamo','Omega','Sigma','Vector','Vortex','Axiom','Bastion','Havoc','Zenith','Nexus','Cipher','Gallop','Cavalier','Paladin','Charger','Destrier','Courser','Colossus','Nemesis','Raptor','Warden','Spartan','Templar','Sentinel','Gladiator','Colt','Filly','Pacer','Racer','Stepper','Sprinter','Trotter','Muse','Bravo','Flicker','Ridgeline','Sundown','Foxfire','Lancer','Marlowe','Nightfall'];
+const COLS=['#e05040','#e8a030','#50c068','#4488ee','#bb55ff','#ff8833','#22ccbb','#dd4488'];
+const TIERS=[
+  {name:'Claiming Race',fee:30,prizes:[100,25,0],aiQ:1,diff:'Easy — good for building up'},
+  {name:'Stakes Race',fee:100,prizes:[380,100,30],aiQ:2,diff:'Medium — competitive field'},
+  {name:'Championship',fee:250,prizes:[950,260,80],aiQ:3,diff:'Elite — tough opponents'},
+];
+const TROUNDS=[{name:'Quarter-Final',prize:500,aiQ:3},{name:'Semi-Final',prize:1000,aiQ:4},{name:'Grand Final',prize:5000,aiQ:5}];
+const PL=['1st','2nd','3rd','4th','5th','6th'];
+const RPD=4,BREED_DAYS=5,BREED_COST=200,HOF_WINS=12,HOF_EARN=8000;
+const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const al=()=>Math.random()<.5?'A':'a';
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fmtM=n=>'$'+n.toLocaleString();
+function shadeCol(hex,amt){const n=parseInt(hex.replace('#',''),16),cl=v=>clamp(v,0,255);return'#'+[cl((n>>16)+amt),cl(((n>>8)&255)+amt),cl((n&255)+amt)].map(v=>v.toString(16).padStart(2,'0')).join('');}
+
+// ── STATE ──────────────────────────────────────────────
+let G={money:400,day:1,tab:'stable',horses:[],mkt:[],retired:[],pending:[],bsel:[],rh:'',rtier:0,rst:null,rres:null,animId:null,loan:0,loanDay:0,gameState:'playing',loseReason:'',tourney:null,tourActive:false,racesLeft:RPD,confirmSell:null,totalRaces:0,grindClicks:0,wday:-1};
+let RD=null;
+
+// ── GENERATORS ─────────────────────────────────────────
+function mkH(q=1){const[lo,hi]=[[8,34],[20,52],[38,68],[55,86],[68,104]][clamp(q-1,0,4)];return{id:Math.random().toString(36).slice(2),name:NAMES[ri(0,NAMES.length-1)]+(Math.random()<.09?' II':''),ci:ri(0,COLS.length-1),spd:ri(lo,hi),sta:ri(lo,hi),lck:ri(10,90),genes:{s:[al(),al()],t:[al(),al()],z:[al(),al()]},age:ri(1,6),wins:0,races:0,earnings:0,special:null};}
+function mkMortalis(){return{id:Math.random().toString(36).slice(2),name:'Mortalis',ci:0,spd:2,sta:2,lck:2,genes:{s:['a','a'],t:['a','a'],z:['a','a']},age:ri(14,20),wins:0,races:ri(80,200),earnings:0,special:'mortalis'};}
+function mkSplashy(){return{id:Math.random().toString(36).slice(2),name:'Splashy',ci:4,spd:100,sta:100,lck:100,genes:{s:['A','A'],t:['A','A'],z:['A','A']},age:1,wins:ri(200,500),races:ri(200,500),earnings:0,special:'splashy'};}
+function mkMirage(){return{id:Math.random().toString(36).slice(2),name:'Mirage',ci:6,spd:ri(28,46),sta:ri(28,46),lck:ri(88,99),genes:{s:[al(),al()],t:[al(),al()],z:[al(),al()]},age:ri(3,8),wins:0,races:0,earnings:0,special:'mirage'};}
+function mkIronback(){return{id:Math.random().toString(36).slice(2),name:'Ironback',ci:5,spd:ri(16,28),sta:ri(88,108),lck:ri(18,42),genes:{s:[al(),al()],t:[al(),al()],z:[al(),al()]},age:ri(4,10),wins:0,races:0,earnings:0,special:'ironback'};}
+function mkPhantom(){return{id:Math.random().toString(36).slice(2),name:'Phantom',ci:4,spd:ri(33,53),sta:ri(33,53),lck:ri(33,53),genes:{s:['A','A'],t:['A','A'],z:['A','A']},age:ri(2,6),wins:0,races:0,earnings:0,special:'phantom'};}
+function mkGoldmane(){return{id:Math.random().toString(36).slice(2),name:'Goldmane',ci:1,spd:ri(52,68),sta:ri(7,18),lck:ri(28,52),genes:{s:['A','A'],t:['a','a'],z:[al(),al()]},age:ri(2,5),wins:0,races:0,earnings:0,special:'goldmane'};}
+function mkAIH(q){const h=mkH(q);h.col=COLS[ri(0,COLS.length-1)];return h;}
+
+// ── STATS ───────────────────────────────────────────────
+function gm(g){return g[0]==='A'&&g[1]==='A'?1.25:g[0]!==g[1]?1.1:1.0}
+function es(h){return Math.round(clamp(h.spd*gm(h.genes.s),1,130))}
+function et(h){return Math.round(clamp(h.sta*gm(h.genes.t),1,130))}
+function getSellPrice(h){
+  if(!h)return 0;
+  const sp={splashy:4000,mortalis:2,phantom:170,mirage:42,ironback:95,goldmane:140};
+  if(h.special&&sp[h.special]!==undefined)return sp[h.special];
+  return Math.max(15,Math.round((es(h)+et(h))*1.3));
+}
+
+// ── BREEDING ───────────────────────────────────────────
+function breedGene(g1,g2){const a1=g1[Math.random()<.5?0:1],a2=g2[Math.random()<.5?0:1];return[a1,a2].sort((a,b)=>a<b?1:-1);}
+function breedStat(v1,v2,w1,w2){const hi=Math.max(v1,v2),lo=Math.min(v1,v2),gb=(w1==='A'&&w2==='A')?ri(3,8):(w1!==w2?ri(0,4):0);return clamp(Math.round(hi*0.62+lo*0.38+gb+ri(-5,5)),5,118);}
+function mkOff(h1,h2){const mut=Math.random()<.10,gs=mut?[al(),al()]:breedGene(h1.genes.s,h2.genes.s),gt=breedGene(h1.genes.t,h2.genes.t),gz=breedGene(h1.genes.z,h2.genes.z);return{id:Math.random().toString(36).slice(2),name:NAMES[ri(0,NAMES.length-1)],ci:ri(0,COLS.length-1),spd:breedStat(h1.spd,h2.spd,h1.genes.s[0],h2.genes.s[0]),sta:breedStat(h1.sta,h2.sta,h1.genes.t[0],h2.genes.t[0]),lck:Math.round((h1.lck+h2.lck)/2+ri(-6,6)),genes:{s:gs,t:gt,z:gz},age:0,wins:0,races:0,earnings:0,special:null,_m:mut};}
+
+// ── AWARDS ──────────────────────────────────────────────
+function getAwards(){const all=[...G.horses,...G.retired].filter(h=>h.id&&h.id!=='prev');if(!all.length)return null;const best=(arr,fn)=>arr.length?arr.reduce((b,h)=>fn(h)>fn(b)?h:b,arr[0]):null;return{mvp:best(all.filter(h=>h.wins>0),h=>h.wins),roty:best(all.filter(h=>h.age<=3&&h.races>=3),h=>h.wins/Math.max(1,h.races)),iron:best(all.filter(h=>h.races>=5),h=>h.races),golden:best(all.filter(h=>(h.earnings||0)>0),h=>h.earnings||0),speed:best(all,h=>es(h))};}
+
+// ── SAVE / LOAD ─────────────────────────────────────────
+async function saveGame(){
+  const btn=document.getElementById('saveBtn');
+  try{if(!window.storage){flashBtn(btn,'No storage');return;}const ok=await window.storage.set('jhs6',JSON.stringify({v:6,money:G.money,day:G.day,horses:G.horses,retired:G.retired,pending:G.pending,loan:G.loan,loanDay:G.loanDay,wday:G.wday,rtier:G.rtier,mkt:G.mkt,tourney:G.tourney,gameState:G.gameState,loseReason:G.loseReason,racesLeft:G.racesLeft,totalRaces:G.totalRaces,grindClicks:G.grindClicks}));flashBtn(btn,ok?'Saved ✓':'Failed');}
+  catch(e){flashBtn(btn,'Error');}
+}
+async function tryLoad(){
+  try{if(!window.storage)return false;const r=await window.storage.get('jhs6');if(!r||!r.value)return false;const d=JSON.parse(r.value);if(!d||d.v!==6)return false;Object.assign(G,{money:d.money,day:d.day,horses:d.horses||[],retired:d.retired||[],pending:d.pending||[],loan:d.loan||0,loanDay:d.loanDay||0,wday:d.wday||-1,rtier:d.rtier||0,mkt:d.mkt||[],tourney:d.tourney||null,gameState:d.gameState||'playing',loseReason:d.loseReason||'',racesLeft:d.racesLeft!==undefined?d.racesLeft:RPD,totalRaces:d.totalRaces||0,grindClicks:d.grindClicks||0});return true;}
+  catch(e){return false;}
+}
+function flashBtn(btn,msg){if(!btn)return;const o=btn.textContent;btn.textContent=msg;btn.disabled=true;setTimeout(()=>{btn.textContent=o;btn.disabled=false;},1500);}
+
+// ── DAY MANAGEMENT ─────────────────────────────────────
+function checkArrivals(){const arr=G.pending.filter(p=>G.day>=p.arrivalDay);arr.forEach(p=>{delete p.horse._m;G.horses.push(p.horse);});G.pending=G.pending.filter(p=>G.day<p.arrivalDay);return arr.length;}
+function advanceDay(){G.day++;G.racesLeft=RPD;const a=checkArrivals();checkEnd();return a;}
+function skipDay(){if(G.rst==='running')return;const a=advanceDay();const b=document.getElementById('skipBtn');if(b){const o=b.textContent;b.textContent=a?'Foal!':'Day '+G.day;setTimeout(()=>{b.textContent=o;},900);}render();}
+function checkEnd(){if(G.gameState!=='playing')return;if(G.loan>0&&G.day-G.loanDay>=7){G.gameState='lose';G.loseReason='Loan sharks seized your stable after 7 days without repayment.';}}
+
+// ── HEADER ──────────────────────────────────────────────
+function updHdr(){
+  document.getElementById('moneyEl').textContent=fmtM(G.money);
+  const lD=G.loan?Math.max(0,7-(G.day-G.loanDay)):0;
+  document.getElementById('dayEl').textContent='Day '+G.day+(G.loan?' · Loan: '+lD+'d':'')+' · Races: '+G.racesLeft+'/'+RPD;
+  const tw=G.tourney?G.tourney.wins||0:0;
+  document.getElementById('gfill').style.width=(tw/3*100)+'%';
+  document.getElementById('subEl').textContent=G.tourney&&!G.tourney.done?'Tournament: Round '+(G.tourney.round+1)+'/3':'Goal: Win Jake\'s Grand Tournament';
+  ['stable','race','breed','market','hof','tourney'].forEach(t=>document.getElementById('nt-'+t).classList.toggle('active',t===G.tab));
+}
+
+// ── RENDER ──────────────────────────────────────────────
+function render(){
+  updHdr();
+  if(G.gameState==='win'){showEnd(true);return;}
+  if(G.gameState==='lose'){showEnd(false);return;}
+  if(G.rst==='running')return;
+  const m=document.getElementById('main');
+  if(G.tab==='stable')m.innerHTML=rStable();
+  else if(G.tab==='race')m.innerHTML=rRace();
+  else if(G.tab==='breed')m.innerHTML=rBreed();
+  else if(G.tab==='market')m.innerHTML=rMarket();
+  else if(G.tab==='hof')m.innerHTML=rHOF();
+  else if(G.tab==='tourney')m.innerHTML=rTourney();
+  if(G.tab==='race'){requestAnimationFrame(()=>{const c=document.getElementById('rc');if(c){c.width=c.offsetWidth||600;RD?drawOval(c):drawOvalEmpty(c);}});}
+}
+function showEnd(win){
+  const tw=G.horses.reduce((s,h)=>s+h.wins,0)+G.retired.reduce((s,h)=>s+h.wins,0);
+  const earn=G.horses.reduce((s,h)=>s+(h.earnings||0),0)+G.retired.reduce((s,h)=>s+(h.earnings||0),0);
+  document.getElementById('main').innerHTML=`<div style="text-align:center;padding:50px 20px;min-height:460px;display:flex;flex-direction:column;justify-content:center;align-items:center">
+    <div style="font-family:Orbitron,Impact,sans-serif;font-size:2rem;color:${win?'#ffd700':'#ff4444'};letter-spacing:2px;margin-bottom:12px">${win?'GRAND CHAMPION!':'GAME OVER'}</div>
+    <div style="font-family:Orbitron,sans-serif;font-size:.85rem;color:${win?'#00e676':'#ff9090'};margin-bottom:10px">${win?"Jake's empire conquered the Grand Tournament!":G.loseReason}</div>
+    <div style="color:#6860a0;font-size:.8rem;font-family:Courier New,monospace;margin-bottom:4px">Day ${G.day} · Career Wins: ${tw} · Total Races: ${G.totalRaces}</div>
+    <div style="color:#6860a0;font-size:.76rem;font-family:Courier New,monospace;margin-bottom:24px">Earnings: ${fmtM(earn)} · Balance: ${fmtM(G.money)} · Grinds: ${G.grindClicks.toLocaleString()}</div>
+    <button class="btn bgld" onclick="newGame()" style="font-size:.88rem;padding:12px 30px">PLAY AGAIN</button>
+  </div>`;
+  document.querySelectorAll('nav button').forEach(b=>b.disabled=true);
+}
+
+// ── HTML HELPERS ────────────────────────────────────────
+function sb(l,v,col){const p=clamp(v/130*100,0,100).toFixed(1);return`<div class="sb"><div class="sbl"><span>${l}</span><span>${v}</span></div><div class="sbr"><div class="sbf" style="width:${p}%;background:${col}"></div></div></div>`}
+function gbadge(l,g){const c=g.join(''),col={AA:'#c8a000',Aa:'#4488ff',aA:'#4488ff',aa:'#555'}[c];return`<span class="gb" style="color:${col}">${l}:${c}</span>`}
+const RARES={mirage:{c:'#00bcd4',b:'✦ RARE · High Luck'},ironback:{c:'#78909c',b:'★ RARE · Iron Stamina'},phantom:{c:'#aa44ff',b:'◈ RARE · Pure Bloodline'},goldmane:{c:'#ff8f00',b:'◆ RARE · Speed Burst'}};
+function hcard(h,click,act){
+  const sel=G.bsel.includes(h.id),col=COLS[h.ci],iM=h.special==='mortalis',iS=h.special==='splashy';
+  const rM=h.special?RARES[h.special]||null:null;
+  const nc=iS?'#cc88ff':iM?'#ff4444':rM?rM.c:col,bc=iS?'#cc00ff':iM?'#880022':rM?rM.c:col,sc=iS?'#cc00ff':iM?'#550000':col;
+  const badge=iM?`<div class="sbadge mortb">☠ CURSED</div>`:iS?`<div class="sbadge splb">✦ LEGENDARY</div>`:rM?`<div class="sbadge" style="background:#1a1838;color:${rM.c};border:1px solid ${rM.c}">${rM.b}</div>`:'';
+  let actions='';
+  if(act&&h.id&&h.id!=='prev'){
+    const sp=getSellPrice(h),canSell=G.horses.length>1,isSelling=G.confirmSell===h.id;
+    const sellBtn=canSell?`<button onclick="${isSelling?`doSellHorse('${h.id}',event)`:`initSell('${h.id}',event)`}" class="btn ${isSelling?'bconf':'bsell'}" style="flex:1;font-size:.64rem;padding:4px 0">${isSelling?`CONFIRM +${fmtM(sp)}`:`SELL +${fmtM(sp)}`}</button>`:
+      `<button class="btn bsell" style="flex:1;font-size:.64rem;padding:4px 0" disabled>SELL (need 2+)</button>`;
+    const canRetire=h.wins>=HOF_WINS||(h.earnings||0)>=HOF_EARN;
+    const retHint=!canRetire?`<div style="font-size:.64rem;color:#6860a0;margin-top:2px">HOF: need ${HOF_WINS-h.wins} more wins or ${fmtM(Math.max(0,HOF_EARN-(h.earnings||0)))} earned</div>`:'';
+    const retBtn=`<button onclick="retireHorse('${h.id}',event)" class="btn bpur" style="flex:1;font-size:.64rem;padding:4px 0" ${!canRetire?'disabled':''}>HOF</button>`;
+    actions=`<div style="display:flex;gap:4px;margin-top:7px">${sellBtn}${retBtn}</div>${retHint}`;
+  }
+  return`<div class="hcard${click?' click':''}${sel?' sel':''}${iM?' mort':''}${iS?' spl':''}" style="border-left:4px solid ${bc}" ${click?`onclick="tb('${h.id}')"`:''}>${badge}
+    <div class="hname" style="color:${nc}">${h.name}${h.wins?`<span class="wb">${h.wins}W</span>`:''}</div>
+    <div class="hage">Age ${h.age} · ${h.races} races${h.earnings?` · ${fmtM(h.earnings)}`:''}</div>
+    ${sb('SPD',es(h),sc)}${sb('STA',et(h),'#1b5a1f')}${sb('LCK',h.lck,'#5500aa')}
+    <div style="margin-top:5px">${gbadge('S',h.genes.s)}${gbadge('T',h.genes.t)}${gbadge('Z',h.genes.z)}</div>${actions}</div>`;
+}
+
+// ── TABS ────────────────────────────────────────────────
+function rStable(){
+  const lD=G.loan?Math.max(0,7-(G.day-G.loanDay)):0;
+  const lw=G.loan?`<div class="lwarn">⚠ Loan (${fmtM(G.loan)}) expires in ${lD} day${lD!==1?'s':''}${lD<=2?' — CRITICAL!':''}</div>`:'';
+  const pendHtml=G.pending.length?`<div class="pending-box">🐣 <strong style="color:#90caf9">${G.pending.length} foal${G.pending.length>1?'s':''} incoming!</strong> — ${G.pending.map(p=>`${p.name} arrives Day ${p.arrivalDay}`).join(', ')} — hit <strong>+DAY</strong> to advance.</div>`:'';
+  const hint=G.day<=4&&G.totalRaces<4?`<div class="hint"><strong>Getting Started:</strong> Go to <strong>RACE</strong> and enter a Claiming Race to earn money. You get <strong>${RPD} races per day</strong>. Use <strong>+DAY</strong> to reset races and advance time. Click <strong>JAKE'S</strong> in the header if you're feeling lucky...</div>`:'';
+  const grind=`<div style="margin-bottom:12px"><button class="grind-btn" onclick="doGrind()">💰 GRIND — CLICK TO EARN $1<br><span style="font-size:.72rem;color:#6860a0;font-family:Courier New,monospace">Total clicks: ${G.grindClicks.toLocaleString()}</span></button></div>`;
+  const bar=`<div class="survival">
+    <button class="btn bgld" onclick="doLoan()" ${G.loan?'disabled':''} style="font-size:.74rem;padding:5px 9px">${G.loan?'Loan active':'Emergency Loan +$150'}</button>
+    ${G.loan&&G.money>=G.loan?`<button class="btn bgrn" onclick="repay()" style="font-size:.74rem;padding:5px 9px">Repay ${fmtM(G.loan)}</button>`:''}
+    <span style="color:#4a4070;font-size:.74rem;flex:1;text-align:right">Owe: ${G.loan?fmtM(G.loan):'nothing'}</span>
+  </div>`;
+  if(!G.horses.length)return grind+bar+lw+pendHtml+hint+`<div class="empty">No horses!<br>Visit MARKET to buy your first horse.</div>`;
+  return grind+bar+lw+pendHtml+hint+`<div class="sec">Your Stable (${G.horses.length})</div>
+    <div style="font-size:.76rem;color:#6860a0;margin-bottom:10px">HOF requires ${HOF_WINS}+ wins OR ${fmtM(HOF_EARN)}+ earned. Breed champions to build a dynasty.</div>
+    <div class="grid">${G.horses.map(h=>hcard(h,false,true)).join('')}</div>`;
+}
+
+function rRace(){
+  if(G.tourActive||(G.rst==='done'&&G.rres?.isTourney))return rTourneyRace();
+  const T=TIERS[G.rtier],done=G.rst==='done';
+  const opts=G.horses.map(h=>`<option value="${h.id}" ${G.rh===h.id?'selected':''}>${h.name} (SPD:${es(h)})</option>`).join('');
+  const tg=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
+    ${TIERS.map((t,i)=>`<div onclick="G.rtier=${i};render()" style="cursor:pointer;border-radius:8px;padding:9px 6px;text-align:center;border:2px solid ${G.rtier===i?'#ffd700':'#3a3678'};background:${G.rtier===i?'#2a1f08':'#1c1840'}">
+      <div style="font-family:Orbitron,sans-serif;font-size:.64rem;color:${G.rtier===i?'#ffd700':'#8880b0'}">${t.name}</div>
+      <div style="color:#00e676;font-weight:bold;font-size:.76rem;margin:3px 0">${fmtM(t.fee)}</div>
+      <div style="font-size:.65rem;color:${G.rtier===i?'#c8a800':'#6860a0'}">${['★☆☆ Easy','★★☆ Med','★★★ Hard'][i]}</div>
+    </div>`).join('')}
+  </div>`;
+  const detail=`<div style="background:#1c1840;border:1px solid #3a3678;border-radius:8px;padding:9px;margin-bottom:8px">
+    <div style="font-size:.76rem;color:#8880b0;margin-bottom:4px">${T.diff}</div>
+    <div class="prow" style="margin:0"><span style="color:#ffd700">1st: ${fmtM(T.prizes[0])}</span><span style="color:#8888bb">2nd: ${fmtM(T.prizes[1])}</span><span style="color:#555577">3rd: ${T.prizes[2]?fmtM(T.prizes[2]):'—'}</span><span style="color:#ff4444;margin-left:auto">Entry: -${fmtM(T.fee)}</span></div>
+  </div>`;
+  const rlOk=G.racesLeft>0;
+  const rlPill=`<div class="rlpill ${rlOk?'ok':'out'}">${rlOk?`${G.racesLeft}/${RPD} races remaining today`:'No races left today — press +DAY to continue'}</div>`;
+  const canEnter=G.rh&&G.money>=T.fee&&rlOk;
+  const warn=rlOk&&G.rh&&G.money<T.fee?`<div class="warn">Need ${fmtM(T.fee-G.money)} more to enter</div>`:'';
+  let res='',stand='';
+  if(done&&G.rres){const r=G.rres;res=r.prize>0?`<div class="rbox ${r.place===1?'rwin':'rplace'}">Finished ${PL[r.place-1]}! Earned ${fmtM(r.prize)}</div>`:`<div class="rbox rlose">Finished ${PL[r.place-1]} — no prize. Entry fee lost.</div>`}
+  if(RD?.fo?.length)stand=`<div class="stand"><div class="sec" style="margin-bottom:5px">Final Results</div>${RD.fo.map((h,i)=>`<div class="srow" style="color:${h.ip?'#ffd700':'#8888aa'}"><span>${PL[i]} ${h.ip?'[YOU] ':''}${h.name}</span><span style="color:#ffd700">${T.prizes[i]?fmtM(T.prizes[i]):''}</span></div>`).join('')}</div>`;
+  return`<div class="sec">Race Track</div>${tg}${detail}${rlPill}
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap">
+      <select onchange="G.rh=this.value"><option value="">-- Pick your horse --</option>${opts}</select>
+      <button class="btn bred" onclick="startRace()" ${!canEnter?'disabled':''}>ENTER — ${T.name.toUpperCase()} (${fmtM(T.fee)})</button>
+      ${done?`<button class="btn bgld" onclick="resetRace()">New Race</button>`:''}
+    </div>${warn}
+    <canvas id="rc" height="300"></canvas>
+    <div id="liveStand" style="font-size:.76rem;font-family:Courier New,monospace;color:#6860a0;margin-top:4px;text-align:center;min-height:16px"></div>
+    <div id="skipArea"></div>${res}${stand}
+    <button onclick="setTab('tourney')" style="width:100%;margin-top:10px;padding:9px;border-radius:8px;border:1px solid #8800cc;background:#180a30;color:#cc88ff;cursor:pointer;font-family:Orbitron,sans-serif;font-size:.68rem;letter-spacing:.5px">✦ JAKE'S GRAND TOURNAMENT — Beat the game by winning all 3 rounds</button>
+    <div class="tip">Prize goes to top 3 finishers. Entry fee is always lost.</div>`;
+}
+
+function rTourneyRace(){
+  const T=G.tourney,r=TROUNDS[Math.min(T?T.round:0,2)],done=G.rst==='done';
+  let res='',stand='';
+  if(done&&G.rres?.isTourney){
+    res=G.rres.prize>0?`<div class="rbox rwin">Round won! +${fmtM(G.rres.prize)}</div>`:`<div class="rbox rlose">Eliminated from the tournament!</div>`;
+    res+=`<button class="btn bpur" onclick="G.tab='tourney';resetRace()" style="margin-top:8px">Back to Tournament</button>`;
+  }
+  if(RD?.fo?.length)stand=`<div class="stand"><div class="sec" style="margin-bottom:5px">Results</div>${RD.fo.map((h,i)=>`<div class="srow" style="color:${h.ip?'#ffd700':'#8888aa'}"><span>${PL[i]} ${h.ip?'[YOU] ':''}${h.name}</span></div>`).join('')}</div>`;
+  return`<div class="sec">Tournament — ${r.name}</div>
+    <div class="prow" style="margin-bottom:8px"><span style="color:#cc88ff">Win prize: ${fmtM(r.prize)}</span><span style="color:#6860a0">Elite AI opponents</span></div>
+    <canvas id="rc" height="300"></canvas>
+    <div id="liveStand" style="font-size:.76rem;font-family:Courier New,monospace;color:#6860a0;margin-top:4px;text-align:center;min-height:16px"></div>
+    <div id="skipArea"></div>${res}${stand}`;
+}
+
+function rBreed(){
+  if(!G.horses.length)return`<div class="empty">Buy horses from MARKET first!</div>`;
+  const sel=G.horses.filter(h=>G.bsel.includes(h.id));
+  let prev='';
+  if(sel.length===2){prev=`<div class="bprev"><div class="sec" style="margin-bottom:8px">Breeding — ${BREED_DAYS} Day Process</div>
+    <div style="background:#1a1838;border-radius:10px;padding:22px;text-align:center;border:1px dashed #3a3678">
+      <div style="font-size:2.2rem;margin-bottom:6px">🐣</div>
+      <div style="font-size:.82rem;color:#90caf9;margin-bottom:3px">Stats unknown until foal arrives</div>
+      <div style="font-size:.76rem;color:#6860a0">Foal inherits genes from both parents.<br>Stronger parents = stronger offspring.</div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+      <button class="btn bgrn" onclick="doBreed()" ${G.money<BREED_COST?'disabled':''}>Breed for ${fmtM(BREED_COST)} — Foal in ${BREED_DAYS} days</button>
+      ${G.money<BREED_COST?`<span class="warn">Need ${fmtM(BREED_COST-G.money)} more</span>`:''}
+    </div></div>`;}
+  const pend=G.pending.length?`<div class="pending-box" style="margin-bottom:12px">🐣 <strong style="color:#90caf9">Pending foals:</strong> ${G.pending.map(p=>`${p.name} (Day ${p.arrivalDay})`).join(', ')}</div>`:'';
+  return`<div class="sec">Breeding Lab</div>${pend}
+    <div style="font-size:.78rem;color:#6860a0;margin-bottom:10px">Click 2 horses to select. Breeding costs ${fmtM(BREED_COST)} and takes ${BREED_DAYS} days. <strong style="color:#ffd700">AA genes</strong> give big stat bonuses — breed champions together!</div>
+    <div class="grid">${G.horses.map(h=>hcard(h,true,false)).join('')}</div>${prev}`;
+}
+
+function rMarket(){
+  if(!G.mkt.length)doRefMkt(false);
+  const cards=G.mkt.map(m=>{
+    const h=m.h,col=COLS[h.ci],iM=h.special==='mortalis',iS=h.special==='splashy';
+    const rM=h.special?RARES[h.special]||null:null;
+    const top=iM?`<div style="background:#660011;color:#ff9090;font-family:Orbitron,sans-serif;font-size:.66rem;letter-spacing:1px;padding:5px 10px;margin:-11px -11px 8px;border-radius:9px 9px 0 0;text-align:center">☠ CURSED HORSE — RARE</div>`
+      :iS?`<div style="background:linear-gradient(90deg,#4400aa,#8800cc);color:#eeccff;font-family:Orbitron,sans-serif;font-size:.66rem;letter-spacing:1px;padding:5px 10px;margin:-11px -11px 8px;border-radius:9px 9px 0 0;text-align:center">✦ LEGENDARY — EXTREMELY RARE</div>`
+      :rM?`<div style="background:${rM.c}22;color:${rM.c};border-bottom:1px solid ${rM.c};font-family:Orbitron,sans-serif;font-size:.66rem;letter-spacing:1px;padding:5px 10px;margin:-11px -11px 8px;border-radius:9px 9px 0 0;text-align:center">${rM.b} — RARE FIND</div>`:'';
+    const nc=iS?'#cc88ff':iM?'#ff4444':rM?rM.c:col,bc=iS?'#8800cc':iM?'#550011':rM?rM.c:'#3a3678',lc=iS?'#cc00ff':iM?'#880022':rM?rM.c:col,sc=iS?'#cc00ff':iM?'#550000':col;
+    return`<div class="mcard" style="border-color:${bc}">${top}
+      <div style="border-left:4px solid ${lc};padding-left:8px;margin-bottom:6px"><div class="hname" style="color:${nc}">${h.name}</div><div class="hage">Age ${h.age}</div></div>
+      ${sb('SPD',es(h),sc)}${sb('STA',et(h),'#1b5a1f')}${sb('LCK',h.lck,'#5500aa')}
+      <div style="margin-top:5px">${gbadge('S',h.genes.s)}${gbadge('T',h.genes.t)}${gbadge('Z',h.genes.z)}</div>
+      <div class="ptag">${fmtM(m.price)}</div>
+      <button class="btn bgrn" style="width:100%" onclick="buyH('${h.id}')" ${G.money<m.price?'disabled':''}>Buy${G.money<m.price?' (need '+fmtM(m.price)+')':''}</button>
+    </div>`;
+  }).join('');
+  return`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <div class="sec" style="margin:0">Horse Market</div>
+    <button class="btn bgld" style="padding:5px 12px;font-size:.74rem" onclick="doRefMkt(true)">Refresh (+1 day)</button>
+  </div><div style="font-size:.76rem;color:#6860a0;margin-bottom:10px">Refresh daily for new horses. Watch for rare banner cards!</div>
+  <div class="grid">${cards}</div>`;
+}
+
+function rHOF(){
+  const aw=getAwards();
+  const defs=[{k:'mvp',i:'🏆',t:'MVP',d:h=>`${h.wins} wins`},{k:'roty',i:'🌟',t:'Rookie of Year',d:h=>`${h.wins}W/${h.races}R (age ${h.age})`},{k:'iron',i:'⚙',t:'Iron Horse',d:h=>`${h.races} races`},{k:'golden',i:'💰',t:'Golden Hooves',d:h=>fmtM(h.earnings||0)},{k:'speed',i:'⚡',t:'Speed Demon',d:h=>`SPD ${es(h)}`}];
+  const awHtml=aw?`<div class="sec">Awards</div><div class="award-grid">${defs.map(a=>{const h=aw[a.k];return h?`<div class="award-card"><span class="aicon">${a.i}</span><div class="atitle">${a.t}</div><div class="ahorse" style="color:${COLS[h.ci]}">${h.name}</div><div class="astat">${a.d(h)}</div></div>`:`<div class="award-card"><span class="aicon">${a.i}</span><div class="atitle">${a.t}</div><div class="astat">No winner</div></div>`;}).join('')}</div>`:'';
+  const req=`<div style="background:#1c1840;border:1px solid #3a3678;border-radius:8px;padding:9px 12px;margin-bottom:12px;font-size:.78rem;color:#6860a0">HOF Entry: <strong style="color:#ffd700">${HOF_WINS}+ wins</strong> OR <strong style="color:#ffd700">${fmtM(HOF_EARN)}+ career earnings</strong></div>`;
+  const sorted=[...G.horses].sort((a,b)=>b.wins-a.wins);
+  const roster=sorted.length?`<div class="sec">Active Roster</div>`+sorted.map(h=>`<div class="hof-row"><div style="border-left:3px solid ${COLS[h.ci]};padding-left:8px"><div class="hname" style="color:${COLS[h.ci]}">${h.name}${h.wins?`<span class="wb">${h.wins}W</span>`:''}</div><div class="hage">Age ${h.age} · ${h.races} races · ${fmtM(h.earnings||0)}</div></div><div style="font-size:.76rem;color:#6860a0;font-family:Courier New,monospace;text-align:right">SPD:${es(h)}<br>STA:${et(h)}</div></div>`).join(''):'';
+  const hofL=G.retired.length?`<div class="sec" style="margin-top:12px">Hall of Fame</div>`+G.retired.map(h=>`<div class="hof-row" style="border-color:#2a2460"><div style="border-left:3px solid ${COLS[h.ci]};padding-left:8px"><div class="hname" style="color:${COLS[h.ci]}">⭐ ${h.name}${h.wins?`<span class="wb">${h.wins}W</span>`:''}</div><div class="hage">Retired Age ${h.retiredAge||h.age} · ${h.races} races · ${fmtM(h.earnings||0)}</div></div><div style="font-size:.76rem;color:#6860a0;font-family:Courier New,monospace;text-align:right">SPD:${es(h)}<br>STA:${et(h)}</div></div>`).join(''):'';
+  if(!G.horses.length&&!G.retired.length)return`<div class="empty">No horses yet.</div>`;
+  return req+awHtml+roster+hofL;
+}
+
+function rTourney(){
+  const T=G.tourney,opts=G.horses.map(h=>`<option value="${h.id}" ${G.rh===h.id?'selected':''}>${h.name} (SPD:${es(h)})</option>`).join('');
+  if(!T)return`<div class="sec">Jake's Grand Tournament</div>
+    <div style="background:#1e1a44;border:1px solid #8800cc;border-radius:10px;padding:16px;margin-bottom:14px">
+      <div style="font-family:Orbitron,sans-serif;font-size:.84rem;color:#cc88ff;margin-bottom:8px">✦ THE ULTIMATE CHALLENGE ✦</div>
+      <div style="font-size:.82rem;line-height:1.6;margin-bottom:10px">Win 3 rounds of elite competition to become<br><strong style="color:#ffd700">Jake's Grand Champion</strong> and beat the game!</div>
+      <div class="prow" style="margin-bottom:10px"><span style="color:#aaa">QF:</span><span style="color:#ffd700">+$500</span><span style="color:#aaa">SF:</span><span style="color:#ffd700">+$1,000</span><span style="color:#aaa">Final:</span><span style="color:#ffd700">+$5,000 + TITLE</span></div>
+      <div style="color:#ff9800;font-size:.78rem;margin-bottom:12px">$500 one-time entry. Pick your best horse. Win all 3 rounds.</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <select onchange="G.rh=this.value">${opts.length?`<option value="">-- Pick horse --</option>${opts}`:'<option>No horses yet</option>'}</select>
+        <button class="btn bpur" onclick="enterTourney()" ${!G.horses.length||G.money<500||!G.rh?'disabled':''}>ENTER ($500)</button>
+      </div>
+      ${G.money<500?`<div class="warn" style="margin-top:6px">Need ${fmtM(500-G.money)} more to enter</div>`:''}
+    </div>`;
+  const rL=['QUARTER-FINAL','SEMI-FINAL','GRAND FINAL'];
+  const bracket=TROUNDS.map((r,i)=>{
+    const res=T.results?.[i],cur=i===T.round&&!T.done,lock=i>T.round;
+    const cls='bround'+(lock?' locked':'')+(res?.won?' won':'')+(res&&!res.won?' lost':'');
+    const body=res?`<div style="color:${res.won?'#00e676':'#ff4444'};font-size:.85rem;font-weight:bold">${res.won?`✓ WON — +${fmtM(r.prize)}`:'✗ ELIMINATED'}</div>`
+      :cur?`<div style="font-size:.8rem;color:#ddd8ff;margin-bottom:5px">Your horse: <strong style="color:#ffd700">${G.horses.find(h=>h.id===T.entryHorseId)?.name||'?'}</strong></div><div style="font-size:.74rem;color:#6860a0;margin-bottom:7px">Prize: ${fmtM(r.prize)} — Elite field</div><button class="btn bpur" onclick="startTourneyRound()">RACE THIS ROUND</button>`
+      :`<div style="color:#6860a0;font-size:.76rem">Win previous round first</div>`;
+    return`<div class="${cls}"><div class="rtitle">${rL[i]} — ${r.name}</div>${body}</div>`;
+  }).join('');
+  const endBox=T.done?(T.champion?`<div class="rbox rwin" style="margin-bottom:10px">🏆 GRAND CHAMPION!</div>`:`<div class="rbox rlose" style="margin-bottom:10px">Eliminated. Try again!</div><button class="btn bgld" onclick="G.tourney=null;G.rh='';render()" style="margin-bottom:10px">Try Again</button>`):'';
+  return`<div class="sec">Jake's Grand Tournament</div>${endBox}<div>${bracket}</div>`;
+}
+
+// ── OVAL TRACK ──────────────────────────────────────────
+function getOD(W){const H=300,cx=W/2,cy=H/2,oRX=Math.min(W/2-16,262),oRY=H/2-14,iRX=oRX-76,iRY=oRY-42;return{H,cx,cy,oRX,oRY,iRX,iRY};}
+function lanePos(lane,d){const t=(lane+.5)/6;return{rx:d.iRX+4+t*(d.oRX-d.iRX-8),ry:d.iRY+2+t*(d.oRY-d.iRY-4)};}
+function ovalPt(prog,rx,ry,cx,cy){const a=-Math.PI/2+prog*2*Math.PI;return{x:cx+rx*Math.cos(a),y:cy+ry*Math.sin(a),tang:Math.atan2(ry*Math.cos(a),-rx*Math.sin(a))};}
+function drawOvalBg(ctx,W,d){
+  const{H,cx,cy,oRX,oRY,iRX,iRY}=d;
+  ctx.fillStyle='#060d04';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#251505';ctx.beginPath();ctx.ellipse(cx,cy,oRX,oRY,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#321c08';ctx.beginPath();ctx.ellipse(cx,cy,oRX-3,oRY-3,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#0a2208';ctx.beginPath();ctx.ellipse(cx,cy,iRX,iRY,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#0d2a0a';ctx.beginPath();ctx.ellipse(cx,cy,iRX-7,iRY-4,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#6a3a10';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(cx,cy,oRX,oRY,0,0,Math.PI*2);ctx.stroke();
+  ctx.strokeStyle='#1a4810';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(cx,cy,iRX,iRY,0,0,Math.PI*2);ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,200,.06)';ctx.lineWidth=1;ctx.setLineDash([7,7]);
+  for(let i=1;i<6;i++){const t=i/6,lrx=iRX+3+t*(oRX-iRX-6),lry=iRY+t*(oRY-iRY);ctx.beginPath();ctx.ellipse(cx,cy,lrx,lry,0,0,Math.PI*2);ctx.stroke();}
+  ctx.setLineDash([]);
+  const sfTop=cy-oRY,sfBot=cy-iRY;
+  for(let i=0;i<5;i++){ctx.fillStyle=i%2===0?'#fff':'#222';ctx.fillRect(cx-3,sfTop+i*(sfBot-sfTop)/5,6,(sfBot-sfTop)/5);}
+  ctx.font='bold 8px Courier New';ctx.textAlign='center';ctx.fillStyle='#ffd700';ctx.fillText('START / FINISH',cx,sfTop-4);
+}
+function drawOvalHorse(ctx,x,y,col,tang,fr,special,isP){
+  if(special==='splashy')col=`hsl(${(Date.now()/8)%360},100%,65%)`;
+  else if(special==='mortalis')col='#1e0808';
+  const dk=shadeCol(col,-50),f=fr?1:-1;
+  ctx.save();ctx.translate(x,y);ctx.rotate(tang);
+  ctx.fillStyle='rgba(0,0,0,.22)';ctx.beginPath();ctx.ellipse(0,4,8,2,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=dk;ctx.lineWidth=1.3;ctx.lineCap='round';
+  [[-2.5,1,-2.5+f*2,6.5],[-2.5,1,-2.5-f*1.5,6.5],[2.5,1,2.5+f*2,6.5],[2.5,1,2.5-f*1.5,6.5]].forEach(([ax,ay,bx,by])=>{ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.stroke();});
+  ctx.fillStyle=col;
+  ctx.beginPath();ctx.moveTo(7,1.5);ctx.bezierCurveTo(3,6,-3,6,-8,5);ctx.bezierCurveTo(-11,4,-13,2,-13,0);ctx.bezierCurveTo(-13,-4,-9,-6,-5,-6);ctx.bezierCurveTo(-1,-6,2,-7,5,-5.5);ctx.bezierCurveTo(7,-4,8,-2,7,1.5);ctx.fill();
+  ctx.beginPath();ctx.moveTo(6,-3.5);ctx.bezierCurveTo(6,-7,7,-9,8,-10.5);ctx.bezierCurveTo(9.5,-9.5,10,-7,9,-3.5);ctx.closePath();ctx.fill();
+  ctx.beginPath();ctx.moveTo(8,-10.5);ctx.bezierCurveTo(10,-12,14,-12,16,-10.5);ctx.bezierCurveTo(18,-9.5,19.5,-8,20,-6.5);ctx.bezierCurveTo(20,-5,19,-4.5,17.5,-5);ctx.bezierCurveTo(15,-5.5,12,-7,10,-9);ctx.closePath();ctx.fill();
+  ctx.beginPath();ctx.moveTo(9,-12);ctx.lineTo(10,-14.5);ctx.lineTo(12,-12);ctx.closePath();ctx.fill();
+  ctx.strokeStyle=dk;ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(7,-10);ctx.quadraticCurveTo(4,-12,3,-7);ctx.stroke();
+  ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-13,0);ctx.quadraticCurveTo(-17,fr?-2:2,-16,fr?-5:4);ctx.stroke();
+  ctx.fillStyle=dk;ctx.beginPath();ctx.arc(20,-6,0.8,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=special==='mortalis'?'#550000':'rgba(255,255,255,.9)';ctx.beginPath();ctx.arc(15,-10.5,1.3,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#111';ctx.beginPath();ctx.arc(15.3,-10.5,.65,0,Math.PI*2);ctx.fill();
+  if(special==='mortalis'){ctx.strokeStyle='#ff2200';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(13,-12);ctx.lineTo(17,-9);ctx.stroke();ctx.beginPath();ctx.moveTo(17,-12);ctx.lineTo(13,-9);ctx.stroke();}
+  if(special==='splashy'){const t=Date.now()/150;[0,1,2].forEach(i=>{const a=t+i*2.09;ctx.fillStyle=`hsl(${(i*120+t*40)%360},100%,75%)`;ctx.beginPath();ctx.arc(Math.cos(a)*15,Math.sin(a)*9,1.8,0,Math.PI*2);ctx.fill();});}
+  if(isP){ctx.shadowColor='#ffd700';ctx.shadowBlur=8;ctx.strokeStyle='#ffd700';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(3,-2,12,0,Math.PI*2);ctx.stroke();ctx.shadowBlur=0;}
+  ctx.restore();
+}
+function drawOval(c){
+  if(!RD||!c)return;
+  const ctx=c.getContext('2d'),W=c.width,d=getOD(W);
+  const{cx,cy}=d;drawOvalBg(ctx,W,d);
+  RD.horses.forEach((h,i)=>{
+    const prog=Math.min(h.pos/RD.tl,.9999),lp=lanePos(i,d),pt=ovalPt(prog,lp.rx,lp.ry,cx,cy);
+    const tp=ovalPt(Math.max(0,prog-.04),lp.rx,lp.ry,cx,cy);
+    const grad=ctx.createLinearGradient(tp.x,tp.y,pt.x,pt.y);
+    grad.addColorStop(0,'transparent');grad.addColorStop(1,h.ip?'#ffd700aa':h.col+'88');
+    ctx.strokeStyle=grad;ctx.lineWidth=3;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(tp.x,tp.y);ctx.lineTo(pt.x,pt.y);ctx.stroke();
+    drawOvalHorse(ctx,pt.x,pt.y,h.col,pt.tang,RD.fr,h.special,h.ip);
+  });
+  const sorted=[...RD.horses].sort((a,b)=>{const ai=RD.fo.findIndex(f=>f.id===a.id),bi=RD.fo.findIndex(f=>f.id===b.id);if(ai>=0&&bi>=0)return ai-bi;if(ai>=0)return -1;if(bi>=0)return 1;return b.pos-a.pos;});
+  ctx.font='bold 8px Courier New';ctx.textAlign='center';
+  sorted.slice(0,6).forEach((h,i)=>{ctx.fillStyle=h.ip?'#ffd700':'#7a7890';ctx.fillText((i+1)+'. '+(h.ip?'[YOU] ':'')+h.name.slice(0,6),cx,cy-18+i*12);});
+}
+function drawOvalEmpty(c){const ctx=c.getContext('2d'),W=c.width,d=getOD(W);drawOvalBg(ctx,W,d);ctx.font='11px Courier New';ctx.textAlign='center';ctx.fillStyle='#3a3668';ctx.fillText('PICK A HORSE AND ENTER A RACE',d.cx,d.cy+6);}
+
+// ── RACE ENGINE ──────────────────────────────────────────
+function buildField(ph,aiQ){const ai=Array.from({length:5},(_,i)=>{const h=mkAIH(aiQ);h.col=COLS[(ph.ci+i+1)%COLS.length];return h;});return[{...ph,ip:true,pos:0,col:COLS[ph.ci]},...ai.map(h=>({...h,ip:false,pos:0}))];}
+function startRace(){
+  const T=TIERS[G.rtier];
+  if(!G.rh||G.money<T.fee||G.rst==='running'||G.racesLeft<=0)return;
+  const ph=G.horses.find(h=>h.id===G.rh);if(!ph)return;
+  G.money-=T.fee;G.racesLeft--;G.rst='running';G.rres=null;ph.races++;G.totalRaces++;updHdr();
+  RD={horses:buildField(ph,T.aiQ),fo:[],lt:null,tl:1000,fr:0,fc:0};
+  const c=document.getElementById('rc');if(!c)return;
+  c.width=c.offsetWidth||600;if(G.animId)cancelAnimationFrame(G.animId);G.animId=requestAnimationFrame(loop);
+}
+function startTourneyRound(){
+  const T=G.tourney;if(!T||T.done)return;
+  const ph=G.horses.find(h=>h.id===T.entryHorseId);if(!ph)return;
+  G.tourActive=true;G.tab='race';render();G.rst='running';G.rres=null;ph.races++;G.totalRaces++;updHdr();
+  RD={horses:buildField(ph,TROUNDS[T.round].aiQ),fo:[],lt:null,tl:1000,fr:0,fc:0};
+  requestAnimationFrame(()=>{const c=document.getElementById('rc');if(c){c.width=c.offsetWidth||600;if(G.animId)cancelAnimationFrame(G.animId);G.animId=requestAnimationFrame(loop);}});
+}
+function loop(t){
+  if(!RD||RD.done)return;
+  const c=document.getElementById('rc');if(!c)return;
+  const dt=RD.lt?Math.min((t-RD.lt)/1000,.05):.016;RD.lt=t;
+  RD.fc++;if(RD.fc%8===0)RD.fr=1-RD.fr;
+  RD.horses.forEach(h=>{
+    if(RD.fo.find(f=>f.id===h.id))return;
+    const prog=h.pos/RD.tl,sf=Math.max(.42,1-prog*(1-et(h)/130)*.78),lk=Math.random()<h.lck/100*.03?1.65:1;
+    h.pos=Math.min(h.pos+(es(h)/130)*620*dt*sf*lk*(.8+Math.random()*.4),RD.tl);
+    if(h.pos>=RD.tl)RD.fo.push(h);
+  });
+  drawOval(c);
+  const ls=document.getElementById('liveStand');
+  if(ls){const srt=[...RD.horses].sort((a,b)=>b.pos-a.pos);ls.textContent=srt.map((h,i)=>PL[i]+': '+(h.ip?'[YOU] ':'')+h.name.slice(0,5)).join('  ·  ');}
+  if(RD.fo.find(f=>f.ip)&&!RD.skipShown){RD.skipShown=true;const a=document.getElementById('skipArea');if(a)a.innerHTML=`<button class="btn bgld" style="width:100%;margin-top:8px" onclick="forceFinish()">⚡ SKIP TO RESULTS</button>`;}
+  if(RD.horses.every(h=>RD.fo.find(f=>f.id===h.id))){finishRace();return;}
+  G.animId=requestAnimationFrame(loop);
+}
+function forceFinish(){if(G.animId)cancelAnimationFrame(G.animId);const rem=RD.horses.filter(h=>!RD.fo.find(f=>f.id===h.id));rem.sort((a,b)=>b.pos-a.pos);RD.fo.push(...rem);finishRace();}
+function finishRace(){
+  if(G.animId)cancelAnimationFrame(G.animId);
+  RD.done=true;G.rst='done';
+  const rem=RD.horses.filter(h=>!RD.fo.find(f=>f.id===h.id));rem.sort((a,b)=>b.pos-a.pos);RD.fo.push(...rem);
+  const pi=RD.fo.findIndex(f=>f.ip),phId=G.tourActive?G.tourney?.entryHorseId:G.rh,ph=G.horses.find(h=>h.id===phId);
+  if(G.tourActive){
+    const rnd=G.tourney.round,rI=TROUNDS[rnd],won=pi===0,prize=won?rI.prize:0;
+    G.money+=prize;if(ph){if(won)ph.wins++;ph.earnings=(ph.earnings||0)+prize;}
+    G.tourney.results=G.tourney.results||[];G.tourney.results.push({round:rnd,won,prize});
+    if(won){G.tourney.round++;G.tourney.wins=(G.tourney.wins||0)+1;if(G.tourney.round>=3){G.tourney.done=true;G.tourney.champion=true;G.gameState='win';}}
+    else G.tourney.done=true;
+    G.tourActive=false;G.rres={place:pi+1,prize,isTourney:true};
+  }else{
+    const prize=TIERS[G.rtier].prizes[pi]||0;G.money+=prize;if(ph){if(pi===0)ph.wins++;ph.earnings=(ph.earnings||0)+prize;}G.rres={place:pi+1,prize};
+  }
+  render();requestAnimationFrame(()=>{const c=document.getElementById('rc');if(c){c.width=c.offsetWidth||600;drawOval(c);}});checkEnd();
+}
+function resetRace(){G.rst=null;G.rres=null;RD=null;G.tourActive=false;render();}
+
+// ── ACTIONS ──────────────────────────────────────────────
+function tb(id){if(G.bsel.includes(id))G.bsel=G.bsel.filter(x=>x!==id);else if(G.bsel.length<2)G.bsel.push(id);else G.bsel=[G.bsel[1],id];render();}
+function doBreed(){
+  if(G.bsel.length!==2||G.money<BREED_COST)return;
+  const[h1,h2]=G.bsel.map(id=>G.horses.find(h=>h.id===id));if(!h1||!h2)return;
+  const off=mkOff(h1,h2);off.age=0;
+  G.pending.push({horse:off,arrivalDay:G.day+BREED_DAYS,name:off.name});
+  G.money-=BREED_COST;G.bsel=[];render();
+}
+function doRefMkt(adv=true){
+  if(adv)advanceDay();
+  const cfg=[{q:1,p:150},{q:1,p:175},{q:2,p:320},{q:2,p:380},{q:3,p:580}];
+  G.mkt=cfg.map(c=>{const r=Math.random();
+    if(r<.012)return{h:mkMortalis(),price:ri(3,8)};        // very rare
+    if(c.q===3&&r<.055)return{h:mkSplashy(),price:9999};
+    if(r<.10)return{h:mkMirage(),price:ri(60,100)};
+    if(r<.13)return{h:mkIronback(),price:ri(150,220)};
+    if(c.q>=2&&r<.155)return{h:mkPhantom(),price:ri(300,450)};
+    if(r<.185)return{h:mkGoldmane(),price:ri(200,320)};
+    return{h:mkH(c.q),price:c.p+ri(-25,25)};
+  });
+  if(adv)render();
+}
+function buyH(id){const m=G.mkt.find(x=>x.h.id===id);if(!m||G.money<m.price)return;G.money-=m.price;G.horses.push({...m.h});G.mkt=G.mkt.filter(x=>x.h.id!==id);render();}
+function initSell(id,e){if(e)e.stopPropagation();G.confirmSell=G.confirmSell===id?null:id;render();}
+function doSellHorse(id,e){
+  if(e)e.stopPropagation();if(G.horses.length<=1){G.confirmSell=null;render();return;}
+  const h=G.horses.find(x=>x.id===id);if(!h)return;G.money+=getSellPrice(h);G.horses=G.horses.filter(x=>x.id!==id);
+  if(G.rh===id)G.rh='';G.bsel=G.bsel.filter(x=>x!==id);if(G.tourney?.entryHorseId===id)G.tourney=null;G.confirmSell=null;render();
+}
+function doGrind(){G.money++;G.grindClicks++;document.getElementById('moneyEl').textContent=fmtM(G.money);const btn=document.querySelector('.grind-btn span');if(btn)btn.textContent='Total clicks: '+G.grindClicks.toLocaleString();}
+function doLoan(){if(G.loan)return;G.loan=200;G.loanDay=G.day;G.money+=150;render();}
+function repay(){if(!G.loan||G.money<G.loan)return;G.money-=G.loan;G.loan=0;render();}
+function retireHorse(id,e){
+  if(e)e.stopPropagation();const h=G.horses.find(x=>x.id===id);if(!h)return;
+  if(h.wins<HOF_WINS&&(h.earnings||0)<HOF_EARN)return;
+  h.retiredAge=h.age;G.horses=G.horses.filter(x=>x.id!==id);G.retired.push(h);
+  if(G.rh===id)G.rh='';G.bsel=G.bsel.filter(x=>x!==id);if(G.tourney?.entryHorseId===id)G.tourney=null;G.confirmSell=null;render();
+}
+function enterTourney(){if(!G.rh||G.money<500||G.tourney)return;G.money-=500;G.tourney={round:0,wins:0,results:[],done:false,champion:false,entryHorseId:G.rh};render();}
+function setTab(t){if(G.rst==='running')return;G.tab=t;G.confirmSell=null;render();}
+
+// ── GAME MANAGEMENT ──────────────────────────────────────
+function newGame(){
+  if(G.animId)cancelAnimationFrame(G.animId);RD=null;
+  G={money:400,day:1,tab:'stable',horses:[],mkt:[],retired:[],pending:[],bsel:[],rh:'',rtier:0,rst:null,rres:null,animId:null,loan:0,loanDay:0,gameState:'playing',loseReason:'',tourney:null,tourActive:false,racesLeft:RPD,confirmSell:null,totalRaces:0,grindClicks:0,wday:-1};
+  document.querySelectorAll('nav button').forEach(b=>b.disabled=false);
+  const h1=mkH(1);h1.name='Jackson';const h2=mkH(1);h2.name='Caspar';
+  G.horses=[h1,h2];doRefMkt(false);render();
+}
+async function init(){
+  const ok=await tryLoad();
+  if(!ok)newGame();else{document.querySelectorAll('nav button').forEach(b=>b.disabled=false);render();}
+}
+init();
+</script>
